@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<style>
+body * {
+    padding: 15px 30px;
+    font-family: sans-serif;
+    font-size: 1.1rem;
+}
+</style>
+</head>
+<body>
+
+<h1>Hello.</h1>
+
+<p>
+    <button id="buttonTriggerError">
+        Trigger Error
+    </button>
+</p>
+
+<p>
+    <button id="buttonCustomSend">
+        Custom Send
+    </button>
+</p>
+
+<script src="../src/index.js"></script>
+<script>
+
+window.onload = function() {
+    
+    if (!window.clientLog)
+        throw new Error('Failed to init clientLog')
+    
+    var log = clientLog({
+        dest: 'http://localhost:8080/log'
+    })
+    
+    console.log(log)
+    
+    document.querySelector('#buttonTriggerError').onclick = function() {
+        throw new Error('testing')
+    }
+    
+    document.querySelector('#buttonCustomSend').onclick = function() {
+        log.send('heyo', 'this.html', 23, 5, { message: 'foo' })
+    }
+    
+}
+
+</script>
+
+</body>
+</html>
