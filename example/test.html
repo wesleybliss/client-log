@@ -35,7 +35,10 @@ window.onload = function() {
         throw new Error('Failed to init clientLog')
     
     var log = clientLog({
-        dest: 'http://localhost:8080/log'
+        endpoints: {
+            logs: 'http://localhost:8080/logs',
+            errors: 'http://localhost:8080/errors'
+        }
     })
     
     console.log(log)
@@ -45,7 +48,7 @@ window.onload = function() {
     }
     
     document.querySelector('#buttonCustomSend').onclick = function() {
-        log.send('heyo', 'this.html', 23, 5, { message: 'foo' })
+        log.sendLog('heyo', 'this.html', 23, 5, { message: 'foo' })
     }
     
 }

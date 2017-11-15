@@ -7,8 +7,13 @@ const app = require('./app')
 
 let browserIsOpened = false
 
-app.post('/log', (req, res) => {
+app.post('/logs', (req, res) => {
     console.log(req.body)
+    res.send(200)
+})
+
+app.post('/errors', (req, res) => {
+    console.error(req.body)
     res.send(200)
 })
 

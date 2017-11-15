@@ -2,7 +2,10 @@
 const clientLog = options => {
     
     const defaultOpts = {
-        dest: '',
+        endpoints: {
+            logs: '',
+            errors: ''
+        },
         contentType: 'application/x-www-form-urlencoded; charset="UTF-8"',
         headers: {},
         preserveOnError: true
@@ -10,8 +13,13 @@ const clientLog = options => {
     
     const opts = Object.assign(defaultOpts, options)
     
-    if (typeof opts.dest !== 'string')
-        throw new Error('Option "dest" must be a string')
+    if (!opts.endpoints) throw new Error('Option "endpoints" is required')
+    
+    if (!opts.endpoints.logs || typeof opts.endpoints.logs !== 'string')
+        throw new Error('Option "endpoints.logs" must be a string')
+    
+    if (!opts.endpoints.errors || typeof opts.endpoints.errors !== 'string')
+        throw new Error('Option "endpoints.errors" must be a string')
     
     if (typeof opts.contentType !== 'string')
         throw new Error('Option "contentType" must be a string')
@@ -29,7 +37,7 @@ const clientLog = options => {
             })
     }
     
-    const send = (message, file, line, col, error) => {
+    const send = (endpoint, message, file, line, col, error) => {
         
         if (error && (typeof error === 'object'))
             error = JSON.stringify(error)
@@ -41,11 +49,11 @@ const clientLog = options => {
             .map(k => `${k}=` + encodeURIComponent(data[k]))
             .join('&')
         
-        if (!opts.dest.length) {
+        if (!endpoint.length) {
             console.error('Error', message, file, line, col, error)
         }
         else {
-            http.open('POST', opts.dest, true)
+            http.open('POST', endpoint, true)
             http.setRequestHeader('Content-Type', opts.contentType)
             mapHeaders(http)
             http.send(query)
@@ -53,20 +61,28 @@ const clientLog = options => {
         
     }
     
+    const sendLog = (message, file, line, col, error) =>
+        send(opts.endpoints.logs, message, file, line, col, error)
+    
+    const sendError = (message, file, line, col, error) =>
+        send(opts.endpoints.errors, message, file, line, col, error)
+    
     if (!opts.preserveOnError) {
         window.onerror = send
     }
     else {
         const oldHandler = window.onerror
         window.onerror = (message, file, line, col, error) => {
-            send(message, file, line, col, error)
+            sendError(message, file, line, col, error)
             if (typeof oldHandler === 'function')
                 oldHandler(message, file, line, col, error)
         }
     }
     
     return {
-        send
+        send,
+        sendLog,
+        sendError
     }
     
 }
