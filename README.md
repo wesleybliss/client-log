@@ -27,6 +27,9 @@ See [example](example/).
 if (!window.clientLog)
     throw new Error('Failed to init clientLog')
 
+// or if using via Node,
+const clientLog = require('client-log')
+
 var log = clientLog({
     endpoints: {
         logs: 'http://localhost:8080/logs',
