@@ -6,6 +6,17 @@
   "scripts": {
     "test": "node example/index.js"
   },
+  "directories": {
+    "example": "example"
+  },
+  "devDependencies": {
+    "restify": "^6.3.2",
+    "restify-cors-middleware": "^1.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wesleybliss/client-log.git"
+  },
   "keywords": [
     "client",
     "logging",
@@ -13,8 +24,8 @@
   ],
   "author": "Wesley Bliss <wesley.bliss@gmail.com> (https://wesleybliss.com)",
   "license": "MIT",
-  "devDependencies": {
-    "restify": "^6.3.2",
-    "restify-cors-middleware": "^1.0.1"
-  }
+  "bugs": {
+    "url": "https://github.com/wesleybliss/client-log/issues"
+  },
+  "homepage": "https://github.com/wesleybliss/client-log#readme"
 }
